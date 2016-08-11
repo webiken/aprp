@@ -7,7 +7,7 @@ import tornado.web
 
 from tornado.options import define, options
 
-from settings import logger, PORT
+from aprp.settings import logger, PORT
 
 define("port", default=PORT, help="run on the given port", type=int)
 
@@ -17,7 +17,8 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("Hello, world")
 
-    head = get
+    def head(self):
+        self.write("Hello, world")        
 
 def make_app():
     tornado.options.parse_command_line()
