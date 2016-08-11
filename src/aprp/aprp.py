@@ -2,28 +2,18 @@
 
 import tornado.httpserver
 import tornado.ioloop
-import tornado.options
-import tornado.web
-
 from tornado.options import define, options
 
+import aprp
 from aprp.settings import logger, PORT
 
 define("port", default=PORT, help="run on the given port", type=int)
 
-class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
-
-    @tornado.web.asynchronous
-    def get(self):
-        self.write("Hello, world")
-
-    def head(self):
-        self.write("Hello, world")        
-
 def make_app():
     tornado.options.parse_command_line()
     return tornado.web.Application([
-        (r'.*', AsyncPyRangeProxyHandler),
+        (r"/(?P<filename>[^\/]+)", aprp.RangeHeaderHandler),
+        (r"/(?P<filename>[^\/]+)/(?P<start>[^\/]+)/(?P<end>[^\/]+)?", aprp.RangeParamHandler),
     ])
 
 def start_proxy(app):
@@ -32,10 +22,3 @@ def start_proxy(app):
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
 
-def main():
-
-    app = make_app()
-    start_proxy(app)
-
-if __name__ == '__main__':
-    main()
