@@ -1,27 +1,36 @@
 #!/usr/bin/env python
 
-import tornado.httpserver
+import tornado.ioloop
 import tornado.web
+from tornado.options import options, parse_command_line
 
-import settings
+from settings import logger, PORT
+
+options.logging = None
+parse_command_line()
 
 class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
 
     @tornado.web.asynchronous
     def get(self):
-        pass
+        self.write("Hello, world")
 
-def main():
-    """
-    """
-    app = tornado.web.Application([
+def make_app():
+    logger.info("creating web application with AsyncPyRangeProxyHandler")
+    return tornado.web.Application([
         (r'.*', AsyncPyRangeProxyHandler),
     ])
 
-    http_server = tornado.httpserver.HTTPServer(app)
-    http_server.listen(settigns.PORT)
+def start_proxy():
+    logger.info("starting async lisent on HTTP Server at port {}".format(PORT))
+    tornado.ioloop.IOLoop.current().start()
 
-    tornado.ioloop.IOLoop.instance()
+def main():
+    app = make_app()
+    app.listen(PORT)
+
+    start_proxy()
 
 if __name__ == '__main__':
+    logger.info("staring proxy")
     main()
