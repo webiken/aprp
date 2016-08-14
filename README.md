@@ -18,7 +18,7 @@ There are two types of range requests supported:
 JIRA style branching is used to help with various integrations: JIRA, Slack, etc.
 Branch names follow this naming convention:
 
-`issue-number`-`feature-description`
+`issue-number`_`feature-description`
 
 Example:
 
