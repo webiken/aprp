@@ -14,6 +14,20 @@ There are two types of range requests supported:
       1 /myfilename/<start>/<end>
       2 /myfilename.mp4/1234/789
 
+## Branching and Pull Requests
+JIRA style branching is used to help with various integrations: JIRA, Slack, etc.
+Branch names follow this naming convention:
+```issue-number```-```feature-description```
+Example:
+1. `aprp-1_tornado <https://github.com/webiken/aprp/pull/1>`
+2. `aprp-2_resolve-405 <https://github.com/webiken/aprp/pull/2>`
+3. `aprp-3_unit-tests <https://github.com/webiken/aprp/pull/3>`
+4. `aprp-4_range <https://github.com/webiken/aprp/pull/4>`
+5. `aprp-5_proxy-support <https://github.com/webiken/aprp/pull/5>`
+
+Pull requests are used to syncronize master and maintain its stability.
+No feature merged into master without peer-review, unit tests, etc.
+
 ## Unit Testing
 
 1. Tornado offers a testing library based on python's UnitTest.
@@ -44,6 +58,5 @@ Settings are configurable via the ```settings.py``` module.  Basic settings incl
 1. DEBUG    : development vs production.
 2. PORT     : 80 in production else 8000
 3. UPSTREAM : Upstream server URL
-
 
 
