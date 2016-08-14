@@ -27,7 +27,7 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
 
     def _parse_range(self, val):
         """
-            Parsing the values in the Range header
+            Parsing the values in the Range header.
         """
         try:
             _range = val.split('=')[1].split('-')
@@ -43,7 +43,7 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
             Returns the start and end
             position of the request media.
             Start and end are extracted from
-            the Range header
+            the Range header.
         """
         if not self._is_range():
             if not 'Range' in self.request.headers:
@@ -58,7 +58,7 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
     def _prep_response_headers(self, response):
         """
             Examining and returning content-length
-            from upstream
+            from upstream.
         """
         _bytes , content_length = 'bytes', ''
         self.set_header('Accept-Ranges', _bytes)
@@ -68,7 +68,7 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
     def _make_url(self, filename):
         """
             Abstract UPSTREAM to settings for better
-            portability
+            portability.
         """
         return '{}/{}'.format(settings.UPSTREAM, filename)
 
@@ -101,25 +101,29 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
         """
             Synchronous call to upstream server.
             Used for getting content length upon
-            the client sending a support range check
+            the client sending a support range check.
         """
         http_client = tornado.httpclient.HTTPClient()
 
         try:
+            logger.info("reverse proxying media {}".format(filename))
+            logger.info("getting {} to {}".format(start, end))
             request = self._make_upstream_request(filename, start, end)
             return http_client.fetch(request)
         except tornado.httpclient.HTTPError as e:
-            raise e
-            pass
+            logger.error("http error :")
+            logger.error(e)
+            raise tornado.web.HTTPError(500)
         except Exception as e:
-            raise e
-            pass
+            logger.error(e)
+            raise tornado.web.HTTPError(500)
 
     def _call_upstream_non_blocking(self, filename, start, end):
         """
             Async call to upstream. This is where the proxying
-            is done
+            is done.
         """
+        logger.info("calling upstream to get content length of media {}".format(filename))
         def handle_response(response):
             if not response.error:
                 self._prep_response_headers(response)
@@ -141,9 +145,10 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
             First we check to see if its a support range
             request, then return the content lenght
             from upstream.
-            Else we reverse proxy to upstream
+            Else we reverse proxy to upstream.
 
         """
+        logger.info("handling get for media: {}".format(filename))
         # NICE-TO-HAVE add internal caching
         # and serve from cache when possible
         if not start:
@@ -158,13 +163,13 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
 
 class RangeHeaderHandler(AsyncPyRangeProxyHandler):
     """
-        Support for range in header
+        Support for range in header.
     """
     
     @tornado.web.asynchronous
     def get(self, filename):
         """
-            GET request handler
+            GET request handler.
         """
         start, end = self._get_range()
         self._handle_request(filename, start, end)
@@ -174,7 +179,7 @@ class RangeParamHandler(AsyncPyRangeProxyHandler):
     @tornado.web.asynchronous
     def get(self, filename, start, end=None):
         """
-            GET request handler
+            GET request handler.
         """
         #get the range in headers
         header_start, header_end = self._get_range()
@@ -183,5 +188,5 @@ class RangeParamHandler(AsyncPyRangeProxyHandler):
                 header_end != end:
                 #range is request in headers
                 #and in params as diff values
-                return tornado.web.HTTPError(416)
+                raise tornado.web.HTTPError(416)
         self._handle_request(filename, start, end)
