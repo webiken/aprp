@@ -13,7 +13,7 @@ def make_app():
     tornado.options.parse_command_line()
     return tornado.web.Application([
         (r"/(?P<filename>[^\/]+)", aprp.RangeHeaderHandler),
-        (r"/(?P<filename>[^\/]+)/(?P<start>[^\/]+)/(?P<end>[^\/]+)?", aprp.RangeParamHandler),
+        (r"/(?P<filename>[^\/]+)/(?P<start>[^\d]+)/(?P<end>[^\d]+)?", aprp.RangeParamHandler),
     ])
 
 def start_proxy(app):

@@ -2,6 +2,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 DEBUG = True
 
+UPSTREAM = 'http://localhost:9000'
 # for development we use port 8000
 PORT = 80 if not DEBUG else 8000
 
