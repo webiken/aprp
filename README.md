@@ -29,7 +29,7 @@ Example:
 4. [aprp-4_range](<https://github.com/webiken/aprp/pull/4>)
 5. [aprp-5_proxy-support](<https://github.com/webiken/aprp/pull/5>)
 
-Pull requests are used to syncronize master and maintain its stability.
+Pull requests are used to synchronize master and maintain its stability.
 No feature merged into master without peer-review, unit tests, etc.
 
 ## Unit Testing
