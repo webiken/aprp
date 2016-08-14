@@ -57,7 +57,9 @@ Logging uses the ```RotatingFileHandler``` and is configurable in the
 ```settings``` module.
 
 ## Settings
-Settings are configurable via the ```settings.py``` module.  Basic settings include:
+
+Basic settings include:
+
 1. DEBUG    : development vs production.
 2. PORT     : 80 in production else 8000
 3. UPSTREAM : Upstream server URL
