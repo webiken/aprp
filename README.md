@@ -12,8 +12,8 @@ There are two types of range requests supported:
 
 1. Range in request headers (HTTP 1.1)
 2. Range as URL param, as in : 
-  1. /myfilename/<start>/<end>
-  2. /myfilename.mp4/1234/789
+  1. /myfilename/start/end
+  2. /myfilename.mp4/1234/789101
 
 ## Branching and Pull Requests
 JIRA style branching is used to help with various integrations: JIRA, Slack, etc.
