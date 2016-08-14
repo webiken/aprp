@@ -156,6 +156,7 @@ class AsyncPyRangeProxyHandler(tornado.web.RequestHandler):
             # let's get the conent length
             response = self._call_upstream_blocking(filename, 0, None)
             self._prep_response_headers(response)
+            self.set_status(206, "HTTP 1.1: Returning partial content")
             self.write(response.body)
             self.finish()
 
